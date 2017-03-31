@@ -3,8 +3,7 @@ import sys
 
 def load_data(filepath):
     with open ( filepath[1] , 'r', encoding='windows-1251' ) as f:
-        data = json.load(f)
-    return data
+        return json.load(f)
 
 def get_biggest_bar(data):
     max_seats_count, biggest_bar = data[0]['SeatsCount'], data[0]
