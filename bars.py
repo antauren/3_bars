@@ -2,7 +2,7 @@ import json
 import sys
 
 def load_data(filepath):
-    with open ( filepath[1] , 'r', encoding='windows-1251' ) as f:
+    with open ( filepath , 'r', encoding='windows-1251' ) as f:
         return json.load(f)
 
 def get_biggest_bar(bars_data):
@@ -23,20 +23,52 @@ def get_coordinates(string):
         longitude, latitude = string.split()
         return [float(longitude), float(latitude)]
     except ValueError:
-        print('Введите ДВА ЧИСЛА(широта и долгота) через ПРОБЕЛ: ')
+        print('Введите два числа(широта и долгота) через пробел: ')
+
         return get_coordinates( input() )
 
-filepath = sys.argv
-bars_data = load_data(filepath)
-
-print('самый большой бар: ', get_biggest_bar(bars_data))
-print('самый маленький бар:', get_smallest_bar(bars_data))
-print('для того чтобы узнать ближайший к Вам бар, введите координаты (два числа через пробел): ')
-
-coordinates = get_coordinates(input())
-longitude, latitude = coordinates[0], coordinates[1]
-
-print('самый близкий бар:', get_closest_bar(bars_data, longitude, latitude))
-
 if __name__ == '__main__':
-    pass
+    try:
+        argv_list = sys.argv
+        filepath = argv_list[1]
+
+        if filepath == '--help':
+            print('Чтобы запустить программу, нужно ввести в консоли: <интерпретатор> <скрипт> <база_данных_json>')
+            print('Наример: python3 bars.py data-2897-2016-11-23.json\n')
+            print('Актуальную базу данных можно скачать с сайта открытых данных https://data.mos.ru/opendata/7710881420-bary')
+            print('Файл базы данных нужно положить в папку, где находится скрипт bar.py')
+
+
+        else:
+            try:
+                bars_data = load_data(filepath)
+                print('самый большой бар: ', get_biggest_bar(bars_data))
+                print('самый маленький бар:', get_smallest_bar(bars_data))
+                print('для того чтобы узнать ближайший к Вам бар, введите gps-координаты (широта и долгота) через пробел: ')
+
+                coordinates = get_coordinates(input())
+                longitude, latitude = coordinates[0], coordinates[1]
+
+                print('самый близкий бар:', get_closest_bar(bars_data, longitude, latitude))
+
+            except FileNotFoundError:
+                bars_data = None
+
+            if bars_data is None:
+                print('Ошибка: программа не может найти файл с базой данных баров')
+                print('Воспользуйтесь помощью (--help)')
+
+    except IndexError:
+        filepath = None
+
+    if filepath is None:
+        print('Вас привествует программа поиска баров Москвы')
+        print('Скрипт рассчитывает:')
+        print('\t-самый большой бар')
+        print('\t-самый маленький бар')
+        print('\t-ближайший бар')
+
+        print('Для того чтоб узнать как работает программа введите: python bars.py --help или python3 bars.py --help')
+
+
+
