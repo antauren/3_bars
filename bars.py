@@ -24,54 +24,37 @@ def get_coordinates(string):
         return [float(longitude), float(latitude)]
     except ValueError:
         print('Введите два числа(широта и долгота) через пробел: ')
-
         return get_coordinates( input() )
-
-
-WELCOME = '''
-Вас привествует программа поиска баров Москвы
-Скрипт рассчитывает:
-\t-самый большой бар
-\t-самый маленький бар
-\t-ближайший бар
-Для того чтоб узнать как работает программа введите: python bars.py --help или python3 bars.py --help
-'''
-
-HELP = '''
-Чтобы запустить программу, нужно ввести в консоли: <интерпретатор> <скрипт> <база_данных_json>
-Наример: python3 bars.py data-2897-2016-11-23.json
-Актуальную базу данных можно скачать с сайта открытых данных https://data.mos.ru/opendata/7710881420-bary
-Файл базы данных нужно положить в папку, где находится скрипт bar.py
-'''
-
-ERROR = '''
-Ошибка: программа не может найти файл с базой данных баров
-Воспользуйтесь помощью (--help)
-'''
-
-PROGRAM_TEXT = '''
-самый большой бар: {}
-самый маленький бар: {}
-для того чтобы узнать ближайший к Вам бар, введите gps-координаты (широта и долгота) через пробел:'''
-
 
 def start_script(argv_list):
     if len(argv_list) < 2:
-        print(WELCOME)
+        print('Вас привествует программа поиска баров Москвы'
+              'Скрипт рассчитывает:\n'
+              '\t-самый большой бар\n'
+              '\t-самый маленький бар\n'
+              '\t-ближайший бар\n'
+              'Для того чтоб узнать как работает программа введите: python bars.py --help или python3 bars.py --help')
         return None
 
     filepath = argv_list[1]
 
     if filepath == '--help':
-        print(HELP)
+        print('Чтобы запустить программу, нужно ввести в консоли: <интерпретатор> <скрипт> <база_данных_json>\n'
+              'Наример: python3 bars.py data-2897-2016-11-23.json\n'
+              'Актуальную базу данных можно скачать с сайта открытых данных https://data.mos.ru/opendata/7710881420-bary\n'
+              'Файл базы данных нужно положить в папку, где находится скрипт bar.py')
         return None
 
     if not os.path.exists(filepath):
-        print (ERROR)        
+        print('Ошибка: программа не может найти файл с базой данных баров\n'
+              'Воспользуйтесь помощью (--help)')
         return None
 
     bars_data = load_data(filepath)
-    print(PROGRAM_TEXT.format(get_biggest_bar(bars_data), get_smallest_bar(bars_data)))
+    print('самый большой бар: {}\n'
+          'самый маленький бар: {}\n'
+          'для того чтобы узнать ближайший к Вам бар, введите gps-координаты (широта и долгота) через пробел:'
+          .format(get_biggest_bar(bars_data), get_smallest_bar(bars_data)))
 
     coordinates = get_coordinates(input())
     longitude, latitude = coordinates[0], coordinates[1]
