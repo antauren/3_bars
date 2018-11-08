@@ -2,21 +2,27 @@ import json
 import sys
 import os.path
 
+
 def load_data(filepath):
-    with open ( filepath , 'r', encoding='windows-1251' ) as f:
+    with open(filepath, 'r', encoding='windows-1251') as f:
         return json.load(f)
+
 
 def get_biggest_bar(bars_data):
     biggest_bar = max(bars_data, key=lambda bar: bar['SeatsCount'])
     return biggest_bar['Name']
 
+
 def get_smallest_bar(bars_data):
     smallest_bar = min(bars_data, key=lambda bar: bar['SeatsCount'])
     return smallest_bar['Name']
 
+
 def get_closest_bar(bars_data, longitude, latitude):
-    closest_bar = min(bars_data, key = lambda bar:((longitude - bar['geoData']['coordinates'][0])**2 + (latitude - bar['geoData']['coordinates'][1])**2 )**0.5)
+    closest_bar = min(bars_data, key=lambda bar: ((longitude - bar['geoData']['coordinates'][0]) ** 2 + (
+            latitude - bar['geoData']['coordinates'][1]) ** 2) ** 0.5)
     return closest_bar['Name']
+
 
 def get_coordinates(string):
     try:
@@ -24,7 +30,8 @@ def get_coordinates(string):
         return [float(longitude), float(latitude)]
     except ValueError:
         print('Введите два числа(широта и долгота) через пробел: ')
-        return get_coordinates( input() )
+        return get_coordinates(input())
+
 
 def start_script(argv_list):
     if len(argv_list) < 2:
