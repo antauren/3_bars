@@ -64,7 +64,7 @@ def start_script(argv_list):
           .format(get_biggest_bar(bars_data), get_smallest_bar(bars_data)))
 
     coordinates = get_coordinates(input())
-    longitude, latitude = coordinates[0], coordinates[1]
+    longitude, latitude = coordinates
     print('самый близкий бар:', get_closest_bar(bars_data, longitude, latitude))
 
 
